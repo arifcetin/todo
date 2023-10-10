@@ -1,6 +1,7 @@
 package com.example.proje.controllers;
 
 
+import com.example.proje.dto.TaskDto;
 import com.example.proje.entities.Task;
 import com.example.proje.requests.CreateTaskRequest;
 import com.example.proje.response.TasksResponse;
@@ -22,8 +23,8 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@RequestBody CreateTaskRequest taskRequest, HttpServletRequest httpServletRequest){
-        return taskService.createTask(taskRequest, httpServletRequest);
+    public Task createTask(@RequestBody TaskDto taskDto, HttpServletRequest httpServletRequest){
+        return taskService.createTask(taskDto, httpServletRequest);
     }
 
     @GetMapping
@@ -38,9 +39,9 @@ public class TaskController {
 
 
     @PutMapping("/{taskId}")
-    public Task updateTask(@RequestBody CreateTaskRequest taskRequest,@PathVariable Long taskId,
+    public Task updateTask(@RequestBody TaskDto taskDto,@PathVariable Long taskId,
                            HttpServletRequest httpServletRequest){
-        return taskService.updateTask(taskRequest,taskId, httpServletRequest);
+        return taskService.updateTask(taskDto,taskId, httpServletRequest);
     }
 
     @GetMapping("/{taskId}")

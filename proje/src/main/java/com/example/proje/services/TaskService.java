@@ -2,6 +2,7 @@ package com.example.proje.services;
 
 
 
+import com.example.proje.dto.TaskDto;
 import com.example.proje.entities.Task;
 import com.example.proje.entities.User;
 import com.example.proje.repo.TaskRepository;
@@ -29,13 +30,13 @@ public class TaskService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    public Task createTask(CreateTaskRequest taskRequest, HttpServletRequest httpServletRequest) {
+    public Task createTask(TaskDto taskDto, HttpServletRequest httpServletRequest) {
         String bearer = httpServletRequest.getHeader("Authorization");
         Long user_id = jwtTokenProvider.getUserIdFromJwt(bearer.substring("Bearer".length()+1));
         Optional<User> user = userRepository.findById(user_id);
         if(user.isPresent()){
             Task newTask = new Task();
-            newTask.setText(taskRequest.getText());
+            newTask.setText(taskDto.getText());
             newTask.setCreateDate(new Date());
             newTask.setUser(user.get());
             newTask.setFinished(false);
@@ -52,12 +53,12 @@ public class TaskService {
     }
 
 
-    public Task updateTask(CreateTaskRequest taskRequest, Long taskId, HttpServletRequest httpServletRequest) {
+    public Task updateTask(TaskDto taskDto, Long taskId, HttpServletRequest httpServletRequest) {
         String bearer = httpServletRequest.getHeader("Authorization");
         Long user_id = jwtTokenProvider.getUserIdFromJwt(bearer.substring("Bearer".length() + 1));
         Optional<Task> foundTask = taskRepository.findById(taskId);
         if (foundTask.isPresent() && foundTask.get().getUser().getUser_id().equals(user_id)) {
-            foundTask.get().setText(taskRequest.getText());
+            foundTask.get().setText(taskDto.getText());
             taskRepository.save(foundTask.get());
             return foundTask.get();
         } else

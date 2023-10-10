@@ -1,8 +1,8 @@
 package com.example.proje.controllers;
 
+import com.example.proje.dto.AuthDto;
 import com.example.proje.entities.User;
 
-import com.example.proje.response.AuthResponse;
 import com.example.proje.security.JwtTokenProvider;
 import com.example.proje.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,24 +35,24 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody User loginUser){
+    public AuthDto login(@RequestBody User loginUser){
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 loginUser.getUserName(),loginUser.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         User user = userService.getOneUserByUserName(loginUser.getUserName());
-        AuthResponse authResponse = new AuthResponse();
+        AuthDto authDto = new AuthDto();
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
-        authResponse.setAccessToken(jwtToken);
-        authResponse.setUserId(user.getUser_id());
-        return authResponse;
+        authDto.setAccessToken(jwtToken);
+        authDto.setUserId(user.getUser_id());
+        return authDto;
     }
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse>  register(@RequestBody User registerUser){
-        AuthResponse authResponse = new AuthResponse();
+    public ResponseEntity<AuthDto>  register(@RequestBody User registerUser){
+        AuthDto authDto = new AuthDto();
         if (userService.getOneUserByUserName(registerUser.getUserName()) != null){
-            authResponse.setMessage("Kullanıcı adı zaten kullanılıyor");
-            return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
+            authDto.setMessage("Kullanıcı adı zaten kullanılıyor");
+            return new ResponseEntity<>(authDto, HttpStatus.BAD_REQUEST);
         }
         User newUser = new User();
         newUser.setUserName(registerUser.getUserName());
@@ -65,24 +65,24 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
 
-        authResponse.setMessage("Kullanıcı başarıyla oluşturuldu.");
-        authResponse.setAccessToken("Bearer "+ jwtToken);
-        authResponse.setUserId(newUser.getUser_id());
-        return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
+        authDto.setMessage("Kullanıcı başarıyla oluşturuldu.");
+        authDto.setAccessToken("Bearer "+ jwtToken);
+        authDto.setUserId(newUser.getUser_id());
+        return new ResponseEntity<>(authDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/forget")
-    public AuthResponse forgetPassword(@RequestBody User user){
-        AuthResponse authResponse = new AuthResponse();
+    public AuthDto forgetPassword(@RequestBody User user){
+        AuthDto authDto = new AuthDto();
         User foundUser = userService.getOneUserByUserName(user.getUserName());
         if (foundUser != null){
             foundUser.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.createUser(foundUser);
-            authResponse.setMessage("Şifre başarıyla değiştirildi");
-            return authResponse;
+            authDto.setMessage("Şifre başarıyla değiştirildi");
+            return authDto;
         }
-        authResponse.setMessage("Kullanıcı adı eşleşmiyor");
-        return authResponse;
+        authDto.setMessage("Kullanıcı adı eşleşmiyor");
+        return authDto;
     }
 
 }

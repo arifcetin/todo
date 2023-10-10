@@ -1,6 +1,6 @@
-package com.example.proje.response;
+package com.example.proje.dto;
 
-public class AuthResponse {
+public class AuthDto {
 
     private String message;
     private Long userId;

@@ -1,10 +1,9 @@
 package com.example.proje.controllers;
 
 
+import com.example.proje.dto.FinishTaskDto;
 import com.example.proje.dto.TaskDto;
 import com.example.proje.entities.Task;
-import com.example.proje.requests.CreateTaskRequest;
-import com.example.proje.response.TasksResponse;
 import com.example.proje.services.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,7 @@ public class TaskController {
     }
 
     @GetMapping("/{taskId}")
-    public TasksResponse finishTask(@PathVariable Long taskId, HttpServletRequest httpServletRequest){
+    public FinishTaskDto finishTask(@PathVariable Long taskId, HttpServletRequest httpServletRequest){
         return taskService.finishTask(taskId, httpServletRequest);
     }
 

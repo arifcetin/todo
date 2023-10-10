@@ -1,12 +1,10 @@
-package com.example.proje.response;
+package com.example.proje.dto;
 
 import java.util.Date;
 
-public class TasksResponse {
-
+public class FinishTaskDto {
     private Date finishDate;
     private String message;
-
     public Date getFinishDate() {
         return finishDate;
     }

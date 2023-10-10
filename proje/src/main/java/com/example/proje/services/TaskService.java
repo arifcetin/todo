@@ -2,13 +2,12 @@ package com.example.proje.services;
 
 
 
+import com.example.proje.dto.FinishTaskDto;
 import com.example.proje.dto.TaskDto;
 import com.example.proje.entities.Task;
 import com.example.proje.entities.User;
 import com.example.proje.repo.TaskRepository;
 import com.example.proje.repo.UserRepository;
-import com.example.proje.requests.CreateTaskRequest;
-import com.example.proje.response.TasksResponse;
 import com.example.proje.security.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,18 +64,18 @@ public class TaskService {
             return null;
     }
 
-    public TasksResponse finishTask(Long taskId, HttpServletRequest httpServletRequest) {
+    public FinishTaskDto finishTask(Long taskId, HttpServletRequest httpServletRequest) {
         String bearer = httpServletRequest.getHeader("Authorization");
         Long user_id = jwtTokenProvider.getUserIdFromJwt(bearer.substring("Bearer".length() + 1));
         Optional<Task> foundTask = taskRepository.findById(taskId);
         if (foundTask.isPresent() && foundTask.get().getUser().getUser_id().equals(user_id)){
             foundTask.get().setFinished(true);
-            TasksResponse tasksResponse = new TasksResponse();
-            tasksResponse.setFinishDate(new Date());
+            FinishTaskDto finishTaskDto = new FinishTaskDto();
+            finishTaskDto.setFinishDate(new Date());
             taskRepository.save(foundTask.get());
             long fark = new Date().getTime()-foundTask.get().getCreateDate().getTime();
-            tasksResponse.setMessage("görevin bitmesi için geçen gün:"+ TimeUnit.DAYS.convert(fark,TimeUnit.MICROSECONDS));
-            return tasksResponse;
+            finishTaskDto.setMessage("görevin bitmesi için geçen gün:"+ TimeUnit.DAYS.convert(fark,TimeUnit.MICROSECONDS));
+            return finishTaskDto;
         }
         else
             return null;

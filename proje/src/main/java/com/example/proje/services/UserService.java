@@ -28,12 +28,14 @@ public class UserService {
         this.securityConfig = securityConfig;
     }
 
-    public User createUser(User newUser) {
-        return userRepository.save(newUser);
+    public UserDto createUser(User newUser) {
+        User user = userRepository.save(newUser);
+        return modelMapper.map(user,UserDto.class);
     }
 
     public List<UserDto> getUsers() {
-        return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+        List<UserDto> userDtos = userRepository.findAll().stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+        return userDtos;
     }
 
     public void userDelete(Long userId) {
@@ -48,7 +50,8 @@ public class UserService {
         user.get().setUserName(userDto.getUserName());
         user.get().setPassword(securityConfig.passwordEncoder().encode(userDto.getPassword()));
         userRepository.save(user.get());
-        return modelMapper.map(user.get(), UserDto.class);
+        UserDto userDto1 =  modelMapper.map(user.get(), UserDto.class);
+        return userDto1;
     }
 
 

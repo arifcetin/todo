@@ -23,29 +23,33 @@ public class TaskController {
 
     @PostMapping
     public Task createTask(@RequestBody TaskDto taskDto, HttpServletRequest httpServletRequest){
-        return taskService.createTask(taskDto, httpServletRequest);
+        Task task = taskService.createTask(taskDto, httpServletRequest);
+        return task;
     }
 
     @GetMapping
     public List<Task> getTasks(HttpServletRequest httpRequest){
-        return taskService.getUserTasks(httpRequest);
+        List<Task> tasks = taskService.getUserTasks(httpRequest);
+        return tasks;
     }
 
     @GetMapping("/finished")
     public List<Task> getFinishedTask(HttpServletRequest httpServletRequest){
-        return taskService.getFinishedTask(httpServletRequest);
+        List<Task> tasks = taskService.getFinishedTask(httpServletRequest);
+        return tasks;
     }
-
 
     @PutMapping("/{taskId}")
     public Task updateTask(@RequestBody TaskDto taskDto,@PathVariable Long taskId,
                            HttpServletRequest httpServletRequest){
-        return taskService.updateTask(taskDto,taskId, httpServletRequest);
+        Task task = taskService.updateTask(taskDto,taskId, httpServletRequest);
+        return task;
     }
 
     @GetMapping("/{taskId}")
     public FinishTaskDto finishTask(@PathVariable Long taskId, HttpServletRequest httpServletRequest){
-        return taskService.finishTask(taskId, httpServletRequest);
+        FinishTaskDto finishTaskDto = taskService.finishTask(taskId, httpServletRequest);
+        return finishTaskDto;
     }
 
     @DeleteMapping("/{taskId}")

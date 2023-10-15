@@ -74,7 +74,7 @@ public class TaskService {
             finishTaskDto.setFinishDate(new Date());
             taskRepository.save(foundTask.get());
             long fark = new Date().getTime()-foundTask.get().getCreateDate().getTime();
-            finishTaskDto.setMessage("görevin bitmesi için geçen gün:"+ TimeUnit.DAYS.convert(fark,TimeUnit.MICROSECONDS));
+            finishTaskDto.setMessage("görevin bitmesi için geçen gün:"+ TimeUnit.MILLISECONDS.toDays(fark));
             return finishTaskDto;
         }
         else

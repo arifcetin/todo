@@ -5,7 +5,6 @@ import com.example.proje.config.SecurityConfig;
 import com.example.proje.dto.UserDto;
 import com.example.proje.entities.User;
 import com.example.proje.repo.UserRepository;
-import com.example.proje.security.JwtTokenProvider;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,16 +41,16 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public UserDto updateUser(UserDto userDto, Long userId) {
+    public UserDto updateUser(User updateUser, Long userId) {
         Optional<User> user = userRepository.findById(userId);
         if(!user.isPresent()){
             return null;
         }
-        user.get().setUserName(userDto.getUserName());
-        user.get().setPassword(securityConfig.passwordEncoder().encode(userDto.getPassword()));
+        user.get().setUserName(updateUser.getUserName());
+        user.get().setEmail(updateUser.getEmail());
+        user.get().setPassword(securityConfig.passwordEncoder().encode(updateUser.getPassword()));
         userRepository.save(user.get());
-        UserDto userDto1 =  modelMapper.map(user.get(), UserDto.class);
-        return userDto1;
+        return modelMapper.map(user.get(), UserDto.class);
     }
 
 
@@ -61,5 +60,9 @@ public class UserService {
 
     public User getOneUserByUserName(String userName) {
         return userRepository.getOneUserByUserName(userName);
+    }
+
+    public User getOneUserByEmail(String email) {
+        return userRepository.getOneUserByEmail(email);
     }
 }

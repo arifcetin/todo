@@ -2,7 +2,7 @@ package com.example.proje.dto;
 
 public class UserDto {
     private String userName;
-    private String password;
+    private String email;
 
     public String getUserName() {
         return userName;
@@ -12,11 +12,11 @@ public class UserDto {
         this.userName = userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
